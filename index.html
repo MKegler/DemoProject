@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<title>Deep Speech Inpainting</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
+.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
+.fa-anchor,.fa-coffee {font-size:200px}
+
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p.custom_caption {
+  text-align: center;
+}
+
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div id="navNormal" class="w3-bar w3-blue w3-card w3-left-align w3-large">
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-padding-large w3-white">Home</a>
+    <a href="#Inpainting" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-padding-large w3-hover-white">Deep Speech Inpainting</a>
+    <a href="#Demo" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-padding-large w3-hover-white">Demo</a>
+    <a href="#sVGG" class="w3-bar-item w3-button w3-hide-small w3-hide-medium w3-padding-large w3-hover-white">speechVGG</a>
+    <a id="drop_button" onclick="myFunction()" title="Toggle Navigation Menu"
+    class="w3-button w3-hide-large w3-left w3-padding-large w3-large w3-white">Menu</i></a>
+  </div>
+
+  <!-- Navbar on small screens -->
+  <div id="navDrop" class="w3-bar-block w3-white w3-large w3-hide">
+    <a href="#" class="w3-bar-item w3-button w3-padding-large w3-white">Home</a>
+    <a href="#Inpainting" class="w3-bar-item w3-button w3-padding-large">Deep Speech Inpainting</a>
+    <a href="#Demo" class="w3-bar-item w3-button w3-padding-large">Demo</a>
+    <a href="#sVGG" class="w3-bar-item w3-button w3-padding-large">SpeechVGG</a>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="w3-container w3-blue w3-center" style="padding-top:75px;padding-bottom:50px;padding-left:5%;padding-right:5%;">
+  <h1 class="w3-margin w3-xxxlarge">Deep speech inpainting of time-frequency masks</h1>
+    <h5 class="w3-xlarge">This website accompanies <a href="https://www.isca-speech.org/archive/Interspeech_2020/pdfs/1532.pdf" target="_blank">Interspeech2020 paper</a> under the same title.
+    <!-- <h5 class="w3-xlarge">Sound samples presented below are available <a href="https://github.com/MKegler/DemoProject" target="_blank">here <i class="fa fa-github w3-hover-opacity"></i></a> (code coming soon!).</h5> -->
+    <h5 class="w3-margin w3-large">
+      <a href='https://mkegler.github.io' target="_blank">Mikolaj Kegler</a>*<sup>,1,2</sup>,
+      Pierre Beckmann*<sup>,1,3</sup>,
+      Milos Cernak<sup>1, <i class="fa fa-envelope"></i></sup></h5>
+    <h5 class="w3-margin w3-medium">
+    1 - Logitech Europe S.A., Lausanne, Switzerland<br>
+    2 - Centre for Neurotechnology & Department of Bioengineering, Imperial College London (ICL), UK<br>
+    3 - Ecole Polytechnique Federale de Lausanne (EPFL), Lausanne, Switzerland<br>
+    <a href='mailto:milos.cernak@ieee.org'><i class="fa fa-envelope"></i> - milos.cernak@ieee.org</a><br>
+    * - equal contribution</h5>
+</header>
+
+<!-- Deep speech inpainting writeup -->
+<div id="Inpainting" class="w3-padding-32 w3-container">
+  <div class="w3-content">
+    <div>
+      <h1><a href="https://www.isca-speech.org/archive/Interspeech_2020/pdfs/1532.pdf" target="_blank">Deep Speech Inpainting</a></h1>
+      <h1 class="w3-padding-16"><img src="images/InpaintingFramework.svg" style="width:100%;max-width:600px;" alt="Inpainting figure"></h1>
+      <p class="custom_caption">Fig.1 Deep speech inpainting framework & training.
+        Learn more about our deep speech feature extractor <a href=#sVGG>below</a>.</p>
+
+      <h5 class="w3-padding-32 w3-justify">
+        We developed a deep learning framework for speech inpainting, the
+        context-based retrieval of large portions of missing or severely degraded time-frequency representations of speech. The network is based on the
+        U-Net architecture and trained using deep feature loss to recover distorted input. The feature loss was obtained through
+        <a href=#sVGG>speechVGG deep speech feature extractor</a>, pre-trained on an auxiliary word recognition task. 
+        This allowed us to emphasize the speech-specific features during the training of the network
+        and ultimately led to the best performance. The framework can operate both when the mask distorting the input is known (informed-) or not (blind inpainting).
+        In the latter case, the network can simultaneously identify and recover distorted portions of time-frequency representations of speech. 
+        For more details and full evaluation, see <a href="https://www.isca-speech.org/archive/Interspeech_2020/pdfs/1532.pdf" target="_blank">the original paper</a>.
+      </h5>
+    </div>
+  </div>
+</div>
+
+<!-- Demo -->
+<div id="Demo"  class="w3-row-padding w3-light-grey w3-padding-32 w3-container">
+  <div class="w3-content">
+    <div class="w3-container">
+      <h1>Demo</h1>
+      <h5 class="w3-padding-32 w3-justify">
+        We prepared over 30 interactive demo samples of our speech inpainting framework in action.
+        The speech samples were obtained from <a href="http://www.openslr.org/12/" target="_blank">LibriSpeech</a> dataset
+        used in our <a href="https://www.isca-speech.org/archive/Interspeech_2020/pdfs/1532.pdf" target="_blank">original paper</a>.
+        Below you can find a speech sample corrupted by removing a part of its time-frequency 
+        representation according to a random mask (A). Then we present the result of processing the degraded sample 
+        through our speech inpainting framework (B). Finally, the last sample is the original recording (C). 
+        Click "Next demo" at the bottom to go to the next sample.
+        Consecutive sets of audio samples are unrelated and presented in a randomized order. Give it a listen!
+      </h5>
+      <div id="media_players">
+        <h5>A) Corrupted speech sample - missing time & frequency information</h5>
+        <div class='w3-container' style='padding-bottom: 2%;'>
+          <audio controls id="sample_masked" style="width:100%; max-width:750px;" controlsList="nodownload">
+              <source src="audio/SamplesDemo/Sample1_masked.mp3" type="audio/mpeg" style="vertical-align: middle;">
+              Your browser does not support the audio element.
+          </audio>
+        </div>
+
+        <h5>B) <i>Inpainted</i> (i.e. recovered) speech sample</h5>
+        <div class='w3-container' style='padding-bottom: 2%;'>
+          <audio controls id="sample_inpainted" style="width:100%; max-width:750px;" controlsList="nodownload">
+            <source src="audio/SamplesDemo/Sample1_recovered.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+
+        <h5>C) Original speech sample</h5>
+        <div class='w3-container' style='padding-bottom: 2%;'>
+          <audio controls id="sample_clean" style="width:100%; max-width:750px;" controlsList="nodownload">
+                  <source src="audio/SamplesDemo/Sample1_clean.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+
+      <div id="loading_prompt" class="w3-hide w3-display-container w3-center">
+        <h1 class="w3-display-middle">Loading next demo...</h1>
+      </div>
+    
+    </div>
+    <!-- <button class="w3-button w3-blue w3-left" onclick="plusDivs(-1)">&#10094; Previous</button> -->
+    <button class="w3-bar w3-blue w3-center w3-large w3-padding-16" onclick="get_next_demo()">Next demo &#10095;</button>
+  </div>
+</div>
+
+<!-- speechVGG writeup -->
+<div id="sVGG" class="w3-padding-32 w3-container">
+  <div class="w3-content">
+    <div>
+      <h1><a href="https://arxiv.org/abs/1910.09909" target="_blank">speechVGG</a></h1>
+      <div class="w3-padding-16">
+        <img src="images/model.svg" style="width:100%;max-width:600px;" alt="sVGG figure1">
+        <img src="images/setups.svg" style="width:100%;max-width:600px;" alt="sVGG figure2">
+      </div>
+      <p class="custom_caption">Fig.2 speechVGG, a flexible, transferable feature extractor for speech processing.</p>
+      <h5 class="w3-padding-32 w3-justify">
+        speechVGG is a deep speech feature extractor, tailored specifically for applications in representation and transfer learning in speech processing 
+        problems. The extractor adopts the classic <a href="https://arxiv.org/abs/1409.1556v6" target="_blank">VGG-16</a> architecture and is trained via the 
+        word recognition task. We showed that extractor can capture generalized speech-specific features in a hierarchical fashion. 
+        Importantly, the generalized representation of speech captured by the pre-trained model is transferable over distinct speech processing tasks, 
+        employing a different dataset. In our experiments, we showed that even relatively simple applications of the pre-trained speechVGG 
+        were capable of achieving results comparable to the state-of-the-art, presumably thanks to the knowledge transfer. 
+        For more details and full evaluation, see <a href="https://arxiv.org/abs/1910.09909" target="_blank">the original paper</a>. 
+        Python implementation of the speechVGG and models pre-trained on the <a href="http://www.openslr.org/12/" target="_blank">LibriSpeech</a> dataset
+        are openly available at: <a href="https://github.com/bepierre/SpeechVGG" target="_blank">https://github.com/bepierre/SpeechVGG</a>.
+      </h5>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-blue w3-center w3-padding-32 w3-medium">
+  Created by <a href='https://mkegler.github.io' target="_blank" style="text-decoration: none">Mikolaj Kegler</a>
+  using <a href="https://www.w3schools.com/w3css/", target="_blank" style="text-decoration: none">W3.css</a>,
+  2020.<br><a href="https://github.com/MKegler", target="_blank"><i class="fa fa-github w3-hover-opacity w3-xlarge w3-padding-16"></i></a>
+</footer>
+
+<script>
+
+// Functions - drop navbar
+
+// Show drop menu bar
+function myFunction() {
+  var x = document.getElementById("navDrop");
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else {
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+// Show drop bar on when clicking elsewhere (mobile)
+window.onload = function(){
+  var x = document.getElementById('navDrop');
+    document.onclick = function(e){
+      if(x.className.indexOf("w3-show") > -1 && e.target.id !== 'navDrop' && e.target.id !== 'drop_button'){
+        x.className = x.className.replace(" w3-show", "");
+      }
+    };
+  };
+
+
+// Functions - demo + media
+
+// Pause for loading screen
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Shuffle vector
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+// Make players and loading scree matching sizes
+document.getElementById("loading_prompt").style.height = document.getElementById("media_players").clientHeight.toString() + "px"
+
+// Define 
+var idx = -1;
+const max_idx = 31;
+const audio_ids = shuffle([...Array(max_idx).keys()]);
+
+// Click to go to the next demo
+async function get_next_demo(){
+  idx++
+  if (idx >= max_idx){
+    idx = 0;
+  }
+  document.getElementById("sample_clean").src = "audio/SamplesDemo/Sample" + (audio_ids[idx] + 1).toString() + "_clean.mp3";
+  document.getElementById("sample_masked").src = "audio/SamplesDemo/Sample" + (audio_ids[idx] + 1).toString() + "_masked.mp3";
+  document.getElementById("sample_inpainted").src = "audio/SamplesDemo/Sample" + (audio_ids[idx] + 1).toString() + "_recovered.mp3";
+
+  document.getElementById("media_players").className += " w3-hide"
+  document.getElementById("loading_prompt").className += " w3-show"
+  await sleep(250) // Pause for loading screen
+  document.getElementById("loading_prompt").className = document.getElementById("loading_prompt").className.replace("w3-show", "")
+  document.getElementById("media_players").className = document.getElementById("media_players").className.replace("w3-hide", "")
+
+}
+
+get_next_demo()
+
+</script>
+
+</body>
+</html>
